@@ -44,8 +44,8 @@ public:
 
     virtual ~MeshSerializer();
 
-    virtual bool Save(std::ostream& os, const std::shared_ptr<Mesh>& mesh) = 0;
-    virtual bool Load(std::istream& is, std::shared_ptr<Mesh>& mesh) = 0;
+    virtual bool Save(std::ostream& os, const Mesh& mesh) = 0;
+    virtual bool Load(std::istream& is, Mesh& mesh) = 0;
 
 protected:
     MeshSerializer() = default;

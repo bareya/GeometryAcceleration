@@ -36,8 +36,8 @@ public:
     ObjMeshSerializer();
     ~ObjMeshSerializer() final;
 
-    bool Save(std::ostream& os, const std::shared_ptr<Mesh>& mesh) final;
-    bool Load(std::istream& is, std::shared_ptr<Mesh>& mesh) final;
+    bool Save(std::ostream& os, const Mesh& mesh) final;
+    bool Load(std::istream& is, Mesh& mesh) final;
 };
 
 #endif // OBJ_MESH_SERIALIZER_H
