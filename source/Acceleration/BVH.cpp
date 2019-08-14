@@ -25,10 +25,9 @@
 #include "BVH.h"
 
 #include <Core/Math.h>
-#include <Geometry/Face.h>
+#include <Core/Prim.h>
 
 #include <algorithm>
-#include <memory>
 
 using Range = BVHNode::Range;
 using SplitMethod = BVHAccelerator::SplitMethod;
