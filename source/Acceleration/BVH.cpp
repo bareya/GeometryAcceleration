@@ -117,7 +117,9 @@ BVHNode::BVHNode(Range r, AABBox b)
 {
 }
 
-BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims, Index max_prims)
+BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims,
+                               Index max_prims,
+                               SplitMethod split_method)
 {
     auto num_prims = static_cast<Index>(prims.size());
     if (num_prims == 0)
@@ -185,9 +187,9 @@ BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims, Index max
         // partial sort along longest extent
         const Index median_index = node_range.start + static_cast<Index>(0.5 * num_node_entries);
         std::nth_element(entries.begin() + node_range.start,
-            entries.begin() + median_index,
-            entries.begin() + node_range.end,
-            centroid_cmp);
+                         entries.begin() + median_index,
+                         entries.begin() + node_range.end,
+                         centroid_cmp);
 
         // split to L - R
         Range lr_range[2] = { { node_range.start, median_index }, { median_index, node_range.end } };
