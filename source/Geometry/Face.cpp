@@ -25,29 +25,29 @@
 #include "Face.h"
 #include "Mesh.h"
 
-Face::Face(std::shared_ptr<Mesh> mesh, IndexArray&& vertices)
+Face::Face(Mesh& mesh, IndexArray&& vertices)
     : Prim()
-    , mesh_(std::move(mesh))
-    , index_(mesh_->NumFaces())
+    , mesh_(mesh)
+    , index_(mesh_.NumFaces())
 {
-    mesh_->AppendFaceVertices(std::move(vertices));
+    mesh_.AppendFaceVertices(std::move(vertices));
 }
 
 const Vector3 & Face::GetPosition(Index vertex) const
 {
-    Index vertex_offset = mesh_->offsets_[index_];
-    Index point_offset = mesh_->vertices_[vertex_offset + vertex];
-    return mesh_->positions_[point_offset];
+    Index vertex_offset = mesh_.offsets_[index_];
+    Index point_offset = mesh_.vertices_[vertex_offset + vertex];
+    return mesh_.positions_[point_offset];
 }
 
 Vector3 & Face::GetPosition(Index vertex)
 {
-    Index vertex_offset = mesh_->offsets_[index_];
-    Index point_offset = mesh_->vertices_[vertex_offset + vertex];
-    return mesh_->positions_[point_offset];
+    Index vertex_offset = mesh_.offsets_[index_];
+    Index point_offset = mesh_.vertices_[vertex_offset + vertex];
+    return mesh_.positions_[point_offset];
 }
 
 Index Face::NumVertices() const
 {
-    return mesh_->counts_[index_];
+    return mesh_.counts_[index_];
 }

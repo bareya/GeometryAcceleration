@@ -28,7 +28,6 @@
 #include <Core/Prim.h>
 
 #include <memory>
-#include <vector>
 
 class Mesh;
 
@@ -43,10 +42,10 @@ public:
     Index GetIndex() const { return index_; }
 
 protected:
-    Face(std::shared_ptr<Mesh> mesh, IndexArray && vertices);
+    Face(Mesh& mesh, IndexArray&& vertices);
 
 private:
-    std::shared_ptr<Mesh> mesh_;
+    Mesh& mesh_;
     const Index index_{};
 };
 

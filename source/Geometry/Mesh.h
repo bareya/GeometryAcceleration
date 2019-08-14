@@ -32,10 +32,10 @@
 
 class Face;
 
-class Mesh : public std::enable_shared_from_this<Mesh>
+class Mesh
 {
 public:
-    static std::shared_ptr<Mesh> Create();
+    Mesh() = default;
 
     Mesh(const Mesh&) = delete;
     Mesh(Mesh&&) = delete;
@@ -55,9 +55,8 @@ public:
 
     Index AppendPoint(Real x, Real y, Real z)
     {
-        Index offset = positions_.size();
         positions_.emplace_back(x, y, z);
-        return offset;
+        return positions_.size() - 1;
     }
 
     //
@@ -73,7 +72,7 @@ public:
     {
         static_assert(std::is_base_of<Face, T>::value, "AppendFace: T does not derive from Face interface.");
 
-        std::unique_ptr<T> new_face{new T{shared_from_this(), std::forward<Args>(args)...}};
+        std::unique_ptr<T> new_face{new T{*this, std::forward<Args>(args)...}};
         T* ptr = new_face.get();
 
         faces_.push_back(std::move(new_face));
@@ -94,8 +93,6 @@ public:
     friend class Face;
 
 private:
-    Mesh() = default;
-
     Index AppendFaceVertices(IndexArray vertices)
     {
         Index offset = vertices_.size();
@@ -112,7 +109,7 @@ private:
     Vector3Array positions_;
 
     // face information storage
-    Index num_vertices_{};              // total number of vertices
+    Index num_vertices_{};      // total number of vertices
     IndexArray vertices_;       // point indices
     IndexArray counts_;         // vertex count per face
     IndexArray offsets_;        // global offset per face

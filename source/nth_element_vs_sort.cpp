@@ -39,17 +39,17 @@ int main()
     }
 
     ObjMeshSerializer obj_serializer;
-    auto mesh = Mesh::Create();
+    Mesh mesh;
     obj_serializer.Load(if_obj, mesh);
 
     //
     // Construct BVHAccelerator
     //
     std::vector<const Prim*> prims;
-    prims.reserve(mesh->NumFaces());
-    for (Index i{}; i < mesh->NumFaces(); ++i)
+    prims.reserve(mesh.NumFaces());
+    for (Index i{}; i < mesh.NumFaces(); ++i)
     {
-        prims.push_back(mesh->GetFace(i));
+        prims.push_back(mesh.GetFace(i));
     }
 
     BVHAccelerator mesh_bvh{prims, 1};

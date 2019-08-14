@@ -25,12 +25,6 @@
 #include "Mesh.h"
 #include "Face.h"
 
-std::shared_ptr<Mesh> Mesh::Create()
-{
-    struct enable_make_shared : public Mesh {};
-    return std::make_shared<enable_make_shared>();
-}
-
 Mesh::~Mesh()
 {
 }
