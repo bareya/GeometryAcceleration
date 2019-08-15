@@ -3,8 +3,7 @@
 #include <vector>
 #include <fstream>
 
-#include <Core/AABBox.h>
-#include <Core/Vector3.h>
+#include <Foundation/AABBox.h>
 #include <Geometry/Mesh.h>
 #include <Geometry/Triangle.h>
 

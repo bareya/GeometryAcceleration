@@ -25,7 +25,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <Core/AABBox.h>
+#include <Foundation/AABBox.h>
 
 #include <type_traits>
 #include <memory>

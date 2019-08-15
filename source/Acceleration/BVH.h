@@ -25,7 +25,7 @@
 #ifndef BVH_H
 #define BVH_H
 
-#include <Core/AABBox.h>
+#include <Foundation/AABBox.h>
 
 #include <vector>
 

@@ -25,7 +25,7 @@
 #ifndef FACE_H
 #define FACE_H
 
-#include <Core/Prim.h>
+#include <Foundation/Prim.h>
 
 #include <memory>
 

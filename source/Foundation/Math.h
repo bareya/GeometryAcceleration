@@ -37,9 +37,9 @@ constexpr Real Clamp(Real val, Real mn, Real mx)
 
 inline Vector3 Min(const Vector3 & l, const Vector3 & r)
 {
-    return { std::min(l.x(), r.x()),
-             std::min(l.y(), r.y()),
-             std::min(l.z(), r.z()) };
+    return {std::min(l.x(), r.x()),
+            std::min(l.y(), r.y()),
+            std::min(l.z(), r.z())};
 }
 
 inline Vector3 Max(const Vector3 & l, const Vector3 & r)
@@ -49,14 +49,14 @@ inline Vector3 Max(const Vector3 & l, const Vector3 & r)
             std::max(l.z(), r.z())};
 }
 
-inline Vector3 Clamp(const Vector3 & v, const Vector3 & mn, const Vector3 & mx)
+inline Vector3 Clamp(const Vector3& v, const Vector3& mn, const Vector3& mx)
 {
     return {::Clamp(v.x(), mn.x(), mx.x()),
             ::Clamp(v.y(), mn.y(), mx.y()),
             ::Clamp(v.z(), mn.z(), mx.z())};
 }
 
-inline AABBox Union(const AABBox& l, const Vector3 & r)
+inline AABBox Union(const AABBox& l, const Vector3& r)
 {
     return AABBox{::Min(l.MinPoint(), r),
                   ::Max(l.MaxPoint(), r)};

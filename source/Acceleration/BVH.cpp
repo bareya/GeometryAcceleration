@@ -24,8 +24,8 @@
 
 #include "BVH.h"
 
-#include <Core/Math.h>
-#include <Core/Prim.h>
+#include <Foundation/Math.h>
+#include <Foundation/Prim.h>
 
 #include <algorithm>
 

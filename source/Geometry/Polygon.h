@@ -27,7 +27,7 @@
 
 #include "Face.h"
 
-#include <Core/Math.h>
+#include <Foundation/Math.h>
 
 class Polygon final : public Face
 {
