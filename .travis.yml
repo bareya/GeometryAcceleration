@@ -1,0 +1,3 @@
+language: cpp
+install:
+ - apt install gcc cmake
