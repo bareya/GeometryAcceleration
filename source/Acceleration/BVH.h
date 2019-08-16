@@ -79,9 +79,22 @@ class BVHAccelerator
 public:
     enum class SplitMethod
     {
-        MidPoint,
         Median,
-        // SurfaceAreaHeuristic
+    };
+
+    struct PrimCache
+    {
+        PrimCache(const Prim& prim, Index i);
+
+        PrimCache(const PrimCache&) = default;
+        PrimCache(PrimCache&&) = default;
+
+        PrimCache& operator=(const PrimCache&) = default;
+        PrimCache& operator=(PrimCache&&) = default;
+
+        Index index;
+        Vector3 centroid;
+        AABBox bbox;
     };
 
     explicit BVHAccelerator(const std::vector<const Prim*>& prims,
@@ -97,9 +110,15 @@ public:
     Index NumNodes() const { return nodes_.size(); }
     const BVHNode* Root() const { return nodes_.empty() ? nullptr : &nodes_.front(); }
 
+    const std::vector<PrimCache>& GetEntries() const
+    {
+        return entries_;
+    }
+
     Index MemoryUsage() const { return sizeof(BVHNode) * nodes_.size() + sizeof(BVHAccelerator); }
 
 private:
+    std::vector<PrimCache> entries_;
     std::vector<BVHNode> nodes_;
 };
 

@@ -31,6 +31,7 @@
 
 using Range = BVHNode::Range;
 using SplitMethod = BVHAccelerator::SplitMethod;
+using PrimCache = BVHAccelerator::PrimCache;
 
 namespace
 {
@@ -59,33 +60,12 @@ private:
     Index size{};
 };
 
-struct PrimCache
-{
-    PrimCache(const Prim& prim, Index i)
-        : index(i)
-        , centroid(prim.Centroid())
-        , bbox(prim.Bounds())
-    {
-    }
-
-    PrimCache(const PrimCache&) = default;
-    PrimCache(PrimCache&&) = default;
-
-    PrimCache& operator=(const PrimCache&) = default;
-    PrimCache& operator=(PrimCache&&) = default;
-
-    Index index;
-    Vector3 centroid;
-    AABBox bbox;
-};
-
 std::vector<PrimCache> create_prim_cache(const std::vector<const Prim*>& prims, AABBox& centroid_bbox)
 {
     std::vector<PrimCache> entries;
     entries.reserve(prims.size());
 
     // fill entries and compute box
-
     for (auto it = prims.begin(); it != prims.end(); ++it)
     {
         const Prim* prim = *it;
@@ -134,10 +114,10 @@ BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims,
 
     // create root bvh node
     AABBox centroid_bbox;
-    std::vector<PrimCache> entries = create_prim_cache(prims, centroid_bbox);
+    entries_ = create_prim_cache(prims, centroid_bbox);
     nodes_.emplace_back(Range{ 0, num_prims }, centroid_bbox);
 
-    Stack<BVHNode*, 256> stack;
+    Stack<BVHNode*, 512> stack;
     stack.Push(&nodes_.back());
 
     while (!stack.Empty())
@@ -162,13 +142,13 @@ BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims,
         const Range& node_range = node->GetRange();
         const Index num_node_entries = node->NumEntries();
 
-        // BVHNode leaf can group few entries, compute union for all of them from the range
+        // BVHNode leaf can group few entries_, compute union for all of them from the range
         if (num_node_entries <= max_prims)
         {
             AABBox leaf_bbox;
             for (auto i = node_range.start; i < node_range.end; ++i)
             {
-                leaf_bbox = ::Union(leaf_bbox, entries[i].bbox);
+                leaf_bbox = ::Union(leaf_bbox, entries_[i].bbox);
             }
             node->GetBBox() = leaf_bbox;
             stack.Pop();
@@ -186,9 +166,8 @@ BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims,
 
         // partial sort along longest extent
         const Index median_index = node_range.start + static_cast<Index>(0.5 * num_node_entries);
-        std::nth_element(entries.begin() + node_range.start,
-                         entries.begin() + median_index,
-                         entries.begin() + node_range.end,
+        std::nth_element(entries_.begin() + node_range.start, entries_.begin() + median_index,
+                         entries_.begin() + node_range.end,
                          centroid_cmp);
 
         // split to L - R
@@ -196,22 +175,24 @@ BVHAccelerator::BVHAccelerator(const std::vector<const Prim *>& prims,
 
         // median for box split
         AABBox lr_bbox[2];
-        const PrimCache& median = entries[median_index];
+        const PrimCache& median = entries_[median_index];
         split_bbox(bbox, median.centroid, max_extent, lr_bbox);
 
         // append children
         for (Index c{}; c < 2; ++c)
         {
-            //auto new_size = lr_range[c].end - lr_range[c].start;
-
             nodes_.emplace_back(lr_range[c], lr_bbox[c]);
             BVHNode* child = &nodes_.back();
             node->SetChild(c, child);
-
-            // put on top
+            
             stack.Push(child);
         }
     }
+}
 
-    // move all nodes to
+BVHAccelerator::PrimCache::PrimCache(const Prim& prim, Index i)
+    : index(i)
+    , centroid(prim.Centroid())
+    , bbox(prim.Bounds())
+{
 }
