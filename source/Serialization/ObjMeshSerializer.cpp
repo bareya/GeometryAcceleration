@@ -45,7 +45,7 @@ ObjMeshSerializer::~ObjMeshSerializer()
 {
 }
 
-bool ObjMeshSerializer::Load(std::istream& is, std::shared_ptr<Mesh>& mesh)
+bool ObjMeshSerializer::Load(std::istream& is, Mesh& mesh)
 {
     std::set<std::string> not_supported_feature;
 
@@ -54,7 +54,7 @@ bool ObjMeshSerializer::Load(std::istream& is, std::shared_ptr<Mesh>& mesh)
         if (!line.length()) continue;
         auto tokens = string_split(line);
 
-        if (!tokens.size()) continue;
+        if (tokens.empty()) continue;
 
         auto it = tokens.begin();
 
@@ -68,7 +68,7 @@ bool ObjMeshSerializer::Load(std::istream& is, std::shared_ptr<Mesh>& mesh)
             auto y = static_cast<Real>(::atof((*(++it)).c_str()));
             auto z = static_cast<Real>(::atof((*(++it)).c_str()));
 
-            mesh->AppendPoint(x, y, z);
+            mesh.AppendPoint(x, y, z);
         }
         else if (*it == "f")
         {
@@ -81,7 +81,7 @@ bool ObjMeshSerializer::Load(std::istream& is, std::shared_ptr<Mesh>& mesh)
                 vertex_indices.push_back(index - 1);
             }
 
-            mesh->AppendFace<Polygon>(std::move(vertex_indices));
+            mesh.AppendFace<Polygon>(std::move(vertex_indices));
         }
         else
         {
@@ -99,17 +99,17 @@ bool ObjMeshSerializer::Load(std::istream& is, std::shared_ptr<Mesh>& mesh)
 }
 
 
-bool ObjMeshSerializer::Save(std::ostream& os, const std::shared_ptr<Mesh>& mesh)
+bool ObjMeshSerializer::Save(std::ostream& os, const Mesh& mesh)
 {
     // vertices
-    for (Index i{}; i < mesh->NumPoints(); ++i)
+    for (Index i{}; i < mesh.NumPoints(); ++i)
     {
-        const Vector3 & pt = mesh->GetPosition(i);
+        const Vector3 & pt = mesh.GetPosition(i);
         os << "v " << pt.x() << " " << pt.y() << " " << pt.z() << '\n';
     }
 
     // faces
-    for (Index i{}; i < mesh->NumFaces(); ++i)
+    for (Index i{}; i < mesh.NumFaces(); ++i)
     {
         /*
                 os << "f ";

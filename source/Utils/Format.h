@@ -25,8 +25,8 @@
 #ifndef FORMAT_H
 #define FORMAT_H
 
-#include <Core/AABBox.h>
-#include <Core/Vector3.h>
+#include <Foundation/Vector3.h>
+#include <Foundation/AABBox.h>
 
 #include <ostream>
 

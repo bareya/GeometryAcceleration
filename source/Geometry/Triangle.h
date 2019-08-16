@@ -27,13 +27,13 @@
 
 #include "Face.h"
 
-#include <Core/Math.h>
+#include <Foundation/Math.h>
 
 class Triangle final : public Face
 {
 public:
-    Triangle(std::shared_ptr<Mesh> mesh, std::vector<Index> vertices)
-        : Face(std::move(mesh), std::move(vertices))
+    Triangle(Mesh& mesh, std::vector<Index>&& vertices)
+        : Face(mesh, std::move(vertices))
     {
     }
 

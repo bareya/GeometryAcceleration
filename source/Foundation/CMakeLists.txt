@@ -1,4 +1,4 @@
-project(Core CXX)
+project(Foundation CXX)
 
 add_library(${PROJECT_NAME} INTERFACE)
 

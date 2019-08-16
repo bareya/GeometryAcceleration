@@ -27,13 +27,13 @@
 
 #include "Face.h"
 
-#include <Core/Math.h>
+#include <Foundation/Math.h>
 
 class Polygon final : public Face
 {
 public:
-    Polygon(std::shared_ptr<Mesh> mesh, std::vector<Index>&& vertices)
-        : Face(std::move(mesh), std::move(vertices))
+    Polygon(Mesh& mesh, std::vector<Index>&& vertices)
+        : Face(mesh, std::move(vertices))
     {
     }
 

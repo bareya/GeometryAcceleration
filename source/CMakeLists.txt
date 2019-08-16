@@ -1,7 +1,7 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory(Utils)
-add_subdirectory(Core)
+add_subdirectory(Foundation)
 add_subdirectory(Geometry)
 add_subdirectory(Acceleration)
 add_subdirectory(Serialization)
@@ -16,7 +16,7 @@ target_compile_definitions(nth_element_vs_sort
 
 target_link_libraries(nth_element_vs_sort
     PRIVATE
-        Core
+        Foundation
         Geometry
         Serialization
         Acceleration
